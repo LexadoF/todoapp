@@ -14,7 +14,13 @@ const seedDatabase = async () => {
         password: hashedPassword,
     });
 
+    const adminUser2 = userRepository.create({
+        username: 'admin',
+        password: hashedPassword,
+    });
+
     await userRepository.save(adminUser);
+    await userRepository.save(adminUser2);
 
     console.log('Database seeded successfully');
     await SyncDatasource.destroy();

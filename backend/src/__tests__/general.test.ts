@@ -1,10 +1,7 @@
-import express from 'express';
 import request from 'supertest';
 import { Todo } from '../models/todo';
 import { Users } from '../models/users';
 import bcrypt from 'bcrypt';
-import todoRouter from '../routes/todo';
-import authRouter from '../routes/auth';
 import { dbHost, dbName, dbPassword, dbPort, dbUser } from '../constants/enviromentalSettings';
 import { DataSource } from 'typeorm';
 import app from '../app';
