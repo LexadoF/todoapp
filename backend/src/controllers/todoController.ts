@@ -53,13 +53,13 @@ export const updateTodo = async (req: AuthRequest, res: Response) => {
             relations: ['user']
         });
 
+        if (!todo) return res.status(404).json({ message: "Todo not found" });
         if (todo?.userId !== req.user?.id!) return res.status(403).json({ message: `You can't update this todo` });
 
         const { title, description, completed } = req.body as UpdateTodoRequest;
 
         if (title === undefined && description === undefined && completed === undefined) return res.status(400).json({ message: 'At least one of the properties (title, description, completed) must be provided.' });
 
-        if (!todo) return res.status(404).json({ message: "Todo not found" });
         const allowedProperties = ['title', 'description', 'completed'];
 
         const extraProperties = Object.keys(req.body).filter(key => !allowedProperties.includes(key));
@@ -87,7 +87,8 @@ export const deleteTodo = async (req: AuthRequest, res: Response) => {
             where: { id: todoToDelete },
             relations: ['user']
         });
-
+        
+        if (!todo) return res.status(404).json({ message: "Todo not found" });
         if (todo?.userId !== req.user?.id!) return res.status(403).json({ message: `You can't delete this todo` });
 
         const result = await todoRepository.delete(todoToDelete);
@@ -95,7 +96,7 @@ export const deleteTodo = async (req: AuthRequest, res: Response) => {
         if (result.affected) {
             return res.status(204).json({ message: 'Deleted succesfully' });
         } else {
-            return res.status(404).json({ message: "Todo not found" });
+            return res.status(400).json({ message: "Bad request" });
         }
     } catch (error) {
         return res.status(500).json({ message: 'Internal server error' });
