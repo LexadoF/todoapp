@@ -111,8 +111,8 @@ const Dashboard: React.FC = () => {
                                 <td>{todo.completed ? 'Yes' : 'No'}</td>
                                 <td>{todo.userId}</td>
                                 <td>
-                                    <button onClick={() => handleEdit(todo.id)}>Edit</button>
-                                    <button className='redbtn' onClick={() => handleDelete(todo.id)}>Delete</button>
+                                    <button className='edit-btn' onClick={() => handleEdit(todo.id)}>Edit</button>
+                                    <button className='delete-btn' onClick={() => handleDelete(todo.id)}>Delete</button>
                                 </td>
                             </tr>
                         ))}
