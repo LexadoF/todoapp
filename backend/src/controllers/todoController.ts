@@ -2,14 +2,15 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../constants/data-source';
 import { Todo } from '../models/todo';
 import { CreateTodoRequest, UpdateTodoRequest } from '../interfaces/todos';
+import { AuthRequest } from '../interfaces/auth';
 
-export const getTodos = async (req: Request, res: Response) => {
+export const getTodos = async (req: AuthRequest, res: Response) => {
     const todoRepository = AppDataSource.getRepository(Todo);
     const todos = await todoRepository.find();
     return res.status(200).json(todos);
 };
 
-export const getTodoById = async (req: Request, res: Response) => {
+export const getTodoById = async (req: AuthRequest, res: Response) => {
     try {
         const todoRepository = AppDataSource.getRepository(Todo);
         const idToSearch: number = parseInt(req.body.id, 10);
@@ -25,7 +26,7 @@ export const getTodoById = async (req: Request, res: Response) => {
     }
 };
 
-export const createTodo = async (req: Request, res: Response) => {
+export const createTodo = async (req: AuthRequest, res: Response) => {
     try {
         const { title, description } = req.body as CreateTodoRequest;
         if (title === undefined) return res.status(400).json({ message: 'Missign title' });
@@ -33,6 +34,7 @@ export const createTodo = async (req: Request, res: Response) => {
         todoRepository.title = title;
         todoRepository.description = description || "";
         todoRepository.completed = false;
+        todoRepository.userId = req.user?.id!;
         await AppDataSource.manager.insert(Todo, todoRepository);
         return res.status(201).json({ message: 'Todo Created successfully' });
     } catch (error) {
@@ -41,11 +43,17 @@ export const createTodo = async (req: Request, res: Response) => {
     }
 };
 
-export const updateTodo = async (req: Request, res: Response) => {
+export const updateTodo = async (req: AuthRequest, res: Response) => {
     try {
         const todoRepository = AppDataSource.getRepository(Todo);
         const idToUpdate: number = parseInt(req.params.id, 10);
-        const todo = await todoRepository.findOneBy({ id: idToUpdate });
+
+        const todo = await todoRepository.findOne({
+            where: { id: idToUpdate },
+            relations: ['user']
+        });
+
+        if (todo?.userId !== req.user?.id!) return res.status(403).json({ message: `You can't update this todo` });
 
         const { title, description, completed } = req.body as UpdateTodoRequest;
 
@@ -69,12 +77,21 @@ export const updateTodo = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteTodo = async (req: Request, res: Response) => {
+export const deleteTodo = async (req: AuthRequest, res: Response) => {
     try {
         const todoRepository = AppDataSource.getRepository(Todo);
         const todoToDelete: number = parseInt(req.params.id, 10);
         if (isNaN(todoToDelete)) return res.status(400).json({ message: 'Id should be provided and should be a number' });
+
+        const todo = await todoRepository.findOne({
+            where: { id: todoToDelete },
+            relations: ['user']
+        });
+
+        if (todo?.userId !== req.user?.id!) return res.status(403).json({ message: `You can't delete this todo` });
+
         const result = await todoRepository.delete(todoToDelete);
+
         if (result.affected) {
             return res.status(204).json({ message: 'Deleted succesfully' });
         } else {
