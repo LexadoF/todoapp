@@ -6,13 +6,17 @@
 
 
 ## Local Set up ##
+* Download the repository, either via git clone, or github desktop
 - **BACKEND**
-    * Download the repository, either via git clone, or github desktop
     * Open the project folder and then navigate to the folder containing the app ``cd backend``
     * Define the .env variables, change the name of .env.example for .env and fill out the variables (DB_PASSWORD is the only optional variable)
     * Install packages ``npm install``
     * Seed the database ``npm run seed``, executing this will create the DB and insert the corresponding test users
     * Start the development server ``npm run dev``, executing this will start the server for local use
+- **Frontend**
+    * Open the project folder and then navigate to the folder containing the app ``cd frontend``
+    * Install packages ``npm install``
+    * Start the development server ``npm run dev``, executing this will start the frontend for local use
 
 
 ## API routes guide ##
