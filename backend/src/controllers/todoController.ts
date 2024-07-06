@@ -4,13 +4,13 @@ import { Todo } from '../models/todo';
 import { CreateTodoRequest, UpdateTodoRequest } from '../interfaces/todos';
 import { AuthRequest } from '../interfaces/auth';
 
-export const getTodos = async (req: AuthRequest, res: Response) => {
+export const getTodos = async (req: Request, res: Response) => {
     const todoRepository = AppDataSource.getRepository(Todo);
     const todos = await todoRepository.find();
     return res.status(200).json(todos);
 };
 
-export const getTodoById = async (req: AuthRequest, res: Response) => {
+export const getTodoById = async (req: Request, res: Response) => {
     try {
         const todoRepository = AppDataSource.getRepository(Todo);
         const idToSearch: number = parseInt(req.body.id, 10);
