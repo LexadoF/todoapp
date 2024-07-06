@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Roles } from './roles';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Todo } from './todo';
 
 @Entity()
@@ -12,10 +11,6 @@ export class Users {
 
     @Column()
     password: string = "";
-
-    @OneToOne(() => Roles)
-    @JoinColumn({ name: "role", referencedColumnName: "id" })
-    role!: number;
 
     @OneToMany(() => Todo, todo => todo.user)
     todos!: Todo[];

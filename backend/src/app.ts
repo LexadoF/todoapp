@@ -1,11 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import todoRoutes from './routes/todo';
+import authRouter from './routes/auth';
+import todoRouter from './routes/todo';
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(todoRoutes);
+app.use(todoRouter, authRouter);
 
 export default app;

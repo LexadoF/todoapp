@@ -1,13 +1,14 @@
 import express from 'express';
 
-import { getTodos, getTodoById, createTodo, updateTodo, deleteTodo } from '../controllers/todo';
+import { getTodos, getTodoById, createTodo, updateTodo, deleteTodo } from '../controllers/todoController';
+import { checkAuth } from '../middlewares/authMiddleware';
 
-const router = express.Router();
+const todoRouter = express.Router();
 
-router.get('/api/todos', getTodos);
-router.get('/api/todos/:id', getTodoById);
-router.post('/api/todos/create', createTodo);
-router.put('/api/todos/:id', updateTodo);
-router.delete('/api/todos/:id', deleteTodo);
+todoRouter.get('/api/todos', checkAuth, getTodos);
+todoRouter.get('/api/todos/:id', checkAuth, getTodoById);
+todoRouter.post('/api/todos/create', checkAuth, createTodo);
+todoRouter.put('/api/todos/:id', checkAuth, updateTodo);
+todoRouter.delete('/api/todos/:id', checkAuth, deleteTodo);
 
-export default router;
+export default todoRouter;

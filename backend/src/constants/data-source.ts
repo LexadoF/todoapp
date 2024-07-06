@@ -3,7 +3,7 @@ import { Todo } from '../models/todo';
 import { dbHost, dbName, dbPassword, dbPort, dbUser } from './enviromentalSettings';
 import mysql from 'mysql2/promise';
 import { Users } from '../models/users';
-import { Roles } from '../models/roles';
+
 
 //#region Data source instance
 
@@ -21,7 +21,7 @@ export const AppDataSource = new DataSource({
     charset: 'utf8mb4',
     logging: false,
     entities: [
-        Todo, Users, Roles
+        Todo, Users
     ],
     migrations: [],
     subscribers: [],
@@ -59,7 +59,7 @@ export const SyncDatasource = new DataSource({
     charset: 'utf8mb4',
     logging: false,
     entities: [
-        Todo, Users, Roles
+        Todo, Users
     ],
     migrations: [],
     subscribers: [],

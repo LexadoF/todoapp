@@ -3,7 +3,7 @@ import { initializeDataSource } from './constants/data-source';
 import 'reflect-metadata';
 
 const PORT = process.env.PORT || 3000;
-const startServer= async (): Promise<void> =>{
+const startServer = async (): Promise<void> => {
     try {
         await initializeDataSource();
         app.listen(PORT, () => {
