@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 interface Todo {
     id: string;
     title: string;
+    completed: number;
     description: string;
     userId: number
 }
@@ -97,6 +98,7 @@ const Dashboard: React.FC = () => {
                         <tr>
                             <th>Title</th>
                             <th>Description</th>
+                            <th>Completed</th>
                             <th>User</th>
                             <th>Actions</th>
                         </tr>
@@ -106,6 +108,7 @@ const Dashboard: React.FC = () => {
                             <tr key={todo.id}>
                                 <td>{todo.title}</td>
                                 <td>{todo.description}</td>
+                                <td>{todo.completed ? 'Yes' : 'No'}</td>
                                 <td>{todo.userId}</td>
                                 <td>
                                     <button onClick={() => handleEdit(todo.id)}>Edit</button>

@@ -13,7 +13,7 @@ export const getTodos = async (req: Request, res: Response) => {
 export const getTodoById = async (req: Request, res: Response) => {
     try {
         const todoRepository = AppDataSource.getRepository(Todo);
-        const idToSearch: number = parseInt(req.body.id, 10);
+        const idToSearch: number = parseInt(req.params.id, 10);
         if (isNaN(idToSearch)) return res.status(400).json({ message: 'Id should be provided and should be a number' });
         const todo = await todoRepository.findOneBy({ id: idToSearch });
         if (todo) {
