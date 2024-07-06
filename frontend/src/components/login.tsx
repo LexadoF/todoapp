@@ -25,6 +25,7 @@ const Login: React.FC = () => {
             });
             const token = response.data.token;
             localStorage.setItem('userToken', token);
+            localStorage.setItem('userName', username);
             console.log('Login successful');
             navigate('/dashboard');
         } catch (error) {
