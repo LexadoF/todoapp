@@ -15,7 +15,10 @@ export class Todo {
     @Column()
     completed: boolean = false;
 
+    @Column()
+    userId!: number;
+
     @ManyToOne(() => Users, user => user.todos)
     @JoinColumn({ name: "userId", referencedColumnName: "id" })
-    user!: Users;
+    user?: number;
 }
