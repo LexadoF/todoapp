@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import '../assets/Login.css';
 import { URL_BASE } from '../constants/constants';
 
@@ -7,6 +8,13 @@ const Login: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem("userToken") != null) {
+            navigate("/dashboard");
+        }
+    }, [navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -16,8 +24,9 @@ const Login: React.FC = () => {
                 password: password,
             });
             const token = response.data.token;
-            localStorage.setItem('token', token);
+            localStorage.setItem('userToken', token);
             console.log('Login successful');
+            navigate('/dashboard');
         } catch (error) {
             setError('Invalid username or password');
         }
