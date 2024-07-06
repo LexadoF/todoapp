@@ -1,7 +1,9 @@
 import { DataSource } from 'typeorm';
 import { Todo } from '../models/todo';
 import { dbHost, dbName, dbPassword, dbPort, dbUser } from './enviromentalSettings';
-import path from 'path';
+import mysql from 'mysql2/promise';
+import { Users } from '../models/users';
+import { Roles } from '../models/roles';
 
 //#region Data source instance
 
@@ -16,15 +18,13 @@ export const AppDataSource = new DataSource({
     username: dbUser,
     password: dbPassword || '',
     database: dbName,
-    // synchronize: true,
     charset: 'utf8mb4',
     logging: false,
     entities: [
-        Todo
+        Todo, Users, Roles
     ],
     migrations: [],
     subscribers: [],
-    // dropSchema: true
 });
 
 //#endregion
@@ -44,5 +44,39 @@ export const initializeDataSource = async (): Promise<void> => {
         console.error(`Failed to initialize data source: ${err}`);
     }
 }
+
+//#endregion
+
+//#region all the seeder stuff
+export const SyncDatasource = new DataSource({
+    type: 'mysql',
+    host: dbHost,
+    port: dbPort || 3306,
+    username: dbUser,
+    password: dbPassword || '',
+    database: dbName,
+    synchronize: true,
+    charset: 'utf8mb4',
+    logging: false,
+    entities: [
+        Todo, Users, Roles
+    ],
+    migrations: [],
+    subscribers: [],
+    dropSchema: true
+});
+
+export const createDBifNotExists = async () => {
+    const connection = await mysql.createConnection({
+        host: dbHost,
+        user: dbUser,
+        password: dbPassword,
+    });
+
+    const databaseName = dbName;
+
+    await connection.query(`CREATE DATABASE IF NOT EXISTS ${databaseName};`);
+    await connection.end();
+};
 
 //#endregion

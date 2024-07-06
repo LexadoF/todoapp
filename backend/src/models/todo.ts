@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Users } from './users';
 
 @Entity()
 export class Todo {
@@ -13,4 +14,8 @@ export class Todo {
 
     @Column()
     completed: boolean = false;
+
+    @ManyToOne(() => Users, user => user.todos)
+    @JoinColumn({ name: "userId", referencedColumnName: "id" })
+    user!: Users;
 }
